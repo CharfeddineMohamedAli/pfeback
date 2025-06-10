@@ -8,6 +8,7 @@ import com.eventapp.repository.TypeEvenementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,10 +21,34 @@ public class TypeEvenementService {
     private ServiceRepository serviceRepository;
 
     public TypeEvenement createTypeEvenement(TypeEvenementRequestDTO dto) {
-        TypeEvenement type = new TypeEvenement();
-        type.setTitre(dto.getTitre());
+        String titre = dto.getTitre().trim();
+        List<Long> incomingServiceIds = dto.getServiceIds();
 
-        List<ServiceEntity> services = serviceRepository.findAllById(dto.getServiceIds());
+        // Rechercher tous les types d'événements avec le même titre
+        List<TypeEvenement> existingTypes = typeEvenementRepository.findByTitre(titre);
+
+        // Charger les services demandés
+        List<ServiceEntity> services = serviceRepository.findAllById(incomingServiceIds);
+
+        // Vérifier si une combinaison exacte existe déjà
+        for (TypeEvenement existing : existingTypes) {
+            List<Long> existingServiceIds = existing.getServices()
+                                                    .stream()
+                                                    .map(ServiceEntity::getId)
+                                                    .sorted()
+                                                    .toList();
+            List<Long> requestedServiceIds = new ArrayList<>(incomingServiceIds);
+            requestedServiceIds.sort(Long::compareTo);
+
+            if (existingServiceIds.equals(requestedServiceIds)) {
+                // Déjà existant : ne pas enregistrer
+            	throw new IllegalArgumentException("Un type d'événement avec ce titre et ces services existe déjà.");
+            }
+        }
+
+        // Pas de doublon trouvé : créer
+        TypeEvenement type = new TypeEvenement();
+        type.setTitre(titre);
         type.setServices(services);
 
         return typeEvenementRepository.save(type);

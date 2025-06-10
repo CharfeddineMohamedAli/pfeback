@@ -71,9 +71,15 @@ public class ServiceEntityController {
             @RequestParam("prestataireId") Long prestataireId,
             @RequestParam("image") MultipartFile imageFile) throws IOException {
 
+        // Vérification si un service avec ce nom existe déjà
+        if (serviceEntityService.existsByNom(nom)) {
+            throw new RuntimeException("Un service avec ce nom existe déjà.");
+        }
+
         Utilisateur prestataire = utilisateurrepo.findById(prestataireId)
                 .orElseThrow(() -> new RuntimeException("Prestataire non trouvé"));
 
+        // Création du service
         ServiceEntity service = new ServiceEntity();
         service.setNom(nom);
         service.setDescription(description);
@@ -84,10 +90,8 @@ public class ServiceEntityController {
         return ResponseEntity.ok(savedService);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteService(@PathVariable Long id) {
-        serviceEntityService.deleteService(id);
-    }
+
+
     
     @GetMapping("/by-user-nom")
     public ResponseEntity<?> getServicesByUserNom(@RequestParam String nom) {

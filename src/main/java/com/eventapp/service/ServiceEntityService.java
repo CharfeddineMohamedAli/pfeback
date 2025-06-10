@@ -3,6 +3,8 @@ package com.eventapp.service;
 import com.eventapp.model.ServiceEntity;
 import com.eventapp.model.Utilisateur;
 import com.eventapp.repository.ServiceRepository;
+import com.eventapp.repository.SousServiceRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,14 @@ public class ServiceEntityService {
 
     @Autowired
     private ServiceRepository serviceRepository;
+
+    
+    @Autowired
+    private SousServiceRepository sousserviceRepository;
+
+    public boolean existsByNom(String nom) {
+        return serviceRepository.existsByNom(nom);
+    }
 
     public List<ServiceEntity> getAllServices() {
         return serviceRepository.findAll();
@@ -32,7 +42,6 @@ public class ServiceEntityService {
     	 return serviceRepository.findByPrestataire(prestataire);
     }
 
-    public void deleteService(Long id) {
-        serviceRepository.deleteById(id);
-    }
+  
+
 }
