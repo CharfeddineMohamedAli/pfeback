@@ -88,6 +88,7 @@ public class EvenementController {
     	            ville, serviceIds, dateDebut);
 
     	        sousServicesDisponibles = sousServicesDisponibles.stream()
+    	                .filter(ss -> ss.getPrix() <= budgetMax)  // Filter by budget
     	            .filter(ss -> {
     	                // If serviceId is 5, skip name and budget filters
     	                if (ss.getService().getId() == 5L) {
