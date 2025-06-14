@@ -21,11 +21,20 @@ public class TypeEvenementService {
     private ServiceRepository serviceRepository;
 
     public TypeEvenement createTypeEvenement(TypeEvenementRequestDTO dto) {
+    	
+    	
         String titre = dto.getTitre().trim();
+       
         List<Long> incomingServiceIds = dto.getServiceIds();
 
         // Rechercher tous les types d'événements avec le même titre
         List<TypeEvenement> existingTypes = typeEvenementRepository.findByTitre(titre);
+        
+        
+        if (!existingTypes.isEmpty()) {
+        	throw new IllegalArgumentException("Un type d'événement avec ce titre existe déjà.");
+
+        }
 
         // Charger les services demandés
         List<ServiceEntity> services = serviceRepository.findAllById(incomingServiceIds);
