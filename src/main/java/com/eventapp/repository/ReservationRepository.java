@@ -27,12 +27,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("""
     	    SELECT r 
     	    FROM Reservation r
-    	    LEFT JOIN r.service s
     	    LEFT JOIN r.sousService ss
     	    LEFT JOIN ss.prestataire ssPrestataire
-    	    LEFT JOIN s.prestataire sPrestataire
-    	    WHERE LOWER(sPrestataire.nom) = LOWER(:prestataireNom)
-    	    OR LOWER(ssPrestataire.nom) = LOWER(:prestataireNom)
+    	    WHERE  LOWER(ssPrestataire.nom) = LOWER(:prestataireNom)
     	""")
     	List<Reservation> findReservationsByPrestataireNom(@Param("prestataireNom") String prestataireNom);
 

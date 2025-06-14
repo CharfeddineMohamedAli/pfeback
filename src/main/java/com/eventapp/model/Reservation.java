@@ -62,4 +62,12 @@ import java.time.LocalDate;
 
     public Utilisateur getClient() { return client; }
     public void setClient(Utilisateur client) { this.client = client; }
+
+	@Override
+	public String toString() {
+		return "Reservation [id=" + id + ", startDate=" + startDate + ", statut=" + statut + ", service=" + service
+				+ ", sousService=" + sousService + ", client=" + client + "]";
+	}
+    
+    
 }

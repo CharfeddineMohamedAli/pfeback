@@ -62,4 +62,13 @@ import jakarta.persistence.*;
 
     public ServiceEntity getService() { return service; }
     public void setService(ServiceEntity service) { this.service = service; }
+
+	@Override
+	public String toString() {
+		return "SousServiceEntity [id=" + id + ", nom=" + nom + ", description=" + description + ", prix=" + prix
+				+ ", ville=" + ville + ", service=" + service + ", prestataire=" + prestataire + "]";
+	}
+    
+    
+    
 }

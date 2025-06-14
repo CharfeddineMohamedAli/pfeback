@@ -1,6 +1,7 @@
 package com.eventapp.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -76,6 +77,11 @@ public class ServiceEntity {
 
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+
+	@Override
+	public String toString() {
+		return "ServiceEntity [id=" + id + ", nom=" + nom ;
 	}
     
     

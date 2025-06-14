@@ -114,10 +114,6 @@ public class EvenementController {
 
     	        return ResponseEntity.ok(sousServicesDisponibles);
     	}
-        // For each service, filter by the corresponding sous-service
-       
-        
-        // Filtering by the selected sous-services
        
     }
 }

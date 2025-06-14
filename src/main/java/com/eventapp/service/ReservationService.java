@@ -70,7 +70,7 @@ public class ReservationService {
 
 	public List<ReservationGroupDTO> getGroupedReservations(String prestataireNom) {
 		List<Reservation> reservations = reservationRepository.findReservationsByPrestataireNom(prestataireNom);
-
+		System.out.println(reservations);
 		return reservations.stream().filter(r -> r.getSousService() != null)
 				.collect(Collectors.groupingBy(r -> new AbstractMap.SimpleEntry<>(r.getClient(),
 						new AbstractMap.SimpleEntry<>(r.getStartDate(), r.getStatut()))))
