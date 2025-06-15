@@ -3,6 +3,7 @@ package com.eventapp.service;
 import com.eventapp.model.ServiceEntity;
 import com.eventapp.model.SousServiceEntity;
 import com.eventapp.model.Utilisateur;
+import com.eventapp.repository.ReservationRepository;
 import com.eventapp.repository.SousServiceRepository;
 
 import java.util.List;
@@ -15,6 +16,9 @@ public class SousServiceService {
 
     @Autowired
     private SousServiceRepository sousServiceRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     public SousServiceEntity getSousServiceById(Long id) {
         return sousServiceRepository.findById(id)
@@ -41,8 +45,10 @@ public class SousServiceService {
         if (!sousServiceRepository.existsById(id)) {
             throw new RuntimeException("Sous-service not found");
         }
+        reservationRepository.deleteBySousServiceId(id);
         sousServiceRepository.deleteById(id);
     }
+    
     public  List<SousServiceEntity> findByPrestataire(Utilisateur prestataire){
    	 return sousServiceRepository.findByPrestataire(prestataire);
    }

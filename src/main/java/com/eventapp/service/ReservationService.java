@@ -92,5 +92,9 @@ public class ReservationService {
 					return dto;
 				}).collect(Collectors.toList());
 	}
+	
+    void deleteBySousServiceId(Long sousServiceId) {
+    	reservationRepository.deleteBySousServiceId(sousServiceId);
+    }
 
 }

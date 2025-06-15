@@ -105,4 +105,49 @@ public class ServiceEntityController {
 
         return ResponseEntity.ok(services);
     }
+    
+    @DeleteMapping("/{id}")
+    public void deleteTypeEvenement(@PathVariable Long id) {
+    	serviceEntityService.deleteById(id);
+    }
+    
+    @GetMapping("/{id}/hasSousServices")
+    public boolean hasSousServices(@PathVariable Long id) {
+        return serviceEntityService.getServiceById(id)
+            .map(service -> !service.getSousServices().isEmpty())
+            .orElse(false);
+    }
+    
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateService(
+            @PathVariable Long id,
+            @RequestParam("nom") String nom,
+            @RequestParam("description") String description,
+            @RequestParam("prix") double prix,
+            @RequestParam("prestataireId") Long prestataireId,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile) throws IOException {
+
+        Optional<ServiceEntity> optionalService = serviceEntityService.getServiceById(id);
+        if (optionalService.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Service not found");
+        }
+
+        ServiceEntity service = optionalService.get();
+
+        service.setNom(nom);
+        service.setDescription(description);
+        service.setPrix(prix);
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            service.setImage(imageFile.getBytes());
+        }
+
+        Utilisateur prestataire = utilisateurrepo.findById(prestataireId)
+                .orElseThrow(() -> new RuntimeException("Prestataire non trouvé"));
+        service.setPrestataire(prestataire);
+
+        ServiceEntity updatedService = serviceEntityService.saveService(service);
+        return ResponseEntity.ok(updatedService);
+    }
+
 }

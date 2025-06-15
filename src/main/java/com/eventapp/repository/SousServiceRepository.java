@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -74,6 +75,9 @@ public interface SousServiceRepository extends JpaRepository<SousServiceEntity, 
 		                                                             @Param("dateDebut") LocalDate dateDebut);
 
 	List<SousServiceEntity> findByPrestataire(Utilisateur pestataire);
+	@Modifying
+	@Query("DELETE FROM SousServiceEntity s WHERE s.prestataire.id = :prestataireId")
+	void deleteByPrestataireId(@Param("prestataireId") Long prestataireId);
 
 
 }
